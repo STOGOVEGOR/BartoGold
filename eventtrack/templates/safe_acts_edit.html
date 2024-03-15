@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block content %}
+    <h1>{% block title %}Safe act form{% endblock %}</h1>
+
+    {% with messages = get_flashed_messages() %}
+     {% if messages %}
+      <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+     {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('safe_acts_edit', item_id=item_id)}}">
+        {{ wtf.quick_form(form, form_type="horizontal", horizontal_columns=('lg', 20, 30)) }}
+    </form>
+
+{% endblock %}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block scriptshead %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js" integrity="sha512-r22gChDnGvBylk90+2e/ycr3RVrDi8DIOkIGNhJlKfuyQM4tIRAI062MaV8sfjQKYVGjOBaZBOA87z+IhZE9DA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+{% endblock %}
+{% block content %}
+    <h1>{% block title %}Workers status{% endblock %}</h1>
+    <div style="display: flex; justify-content: space-between;">
+        <div style="flex: 1;">
+            <table style="border-collapse: collapse;">
+              <tr>
+                <th>Counters</th>
+                <th>Value</th>
+              </tr>
+              {% for key, value in count_dict.items %}
+              <tr>
+                <td>{{ key | safe }}</td>
+                <td style="text-align: right;">{{ value | safe }}</td>
+              </tr>
+              {% endfor %}
+            </table>
+        </div>
+        <button style="margin-right: 400px;" id="export-button" onclick="exportToExcel('workers_status', 'workers_status.xlsx')">Export to Excel</button>
+    </div>
+
+    {% for message in messages %}
+        <p class="flash_msg">{{ message | safe }}</p>
+    {% endfor %}
+    <br>
+    <table id="workers_status">
+        <tr class="row_font_title">
+            <th>Date</th>
+            <th>Status</th>
+            <th>Workgroup</th>
+            <th>Name</th>
+            <th>Breathalyzer</th>
+            <th>Organisation</th>
+            <th>Work status</th>
+            <th>Supervisor</th>
+            <th>EmployeeID</th>
+        </tr>
+        {% for row in rows %}
+            <tr class="row_font_table" style="background-color:
+                {% if row.Status == 'DENIED' %}
+                    rgba(255, 0, 0, 0.7);
+                {% elif row.Status == 'ALLOWED' %}
+                    rgba(0, 255, 0, 0.7);
+                {% elif row.Status == 'NOT FOUND' %}
+                    rgba(255, 175, 0, 0.7);
+                {% endif %}
+            ">
+                <td style="width: 100px;">{{ row.Date }}</td>
+                <td style="width: 100px;">{{ row.Status }}</td>
+                <td class="breath_column_mid">{{ row.Workgroup }}</td>
+                <td>{{ row.Name }}</td>
+                <td class="breath_column_min">{{ row.Result }}</td>
+                <td class="breath_column_mid">{{ row.Organisation }}</td>
+                <td>{{ row.Work_Status }}</td>
+                <td>{{ row.Supervisor }}</td>
+                <td>{{ row.EmployeeID|default:row.StaffID }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
+{% block scripts %}
+<script>
+    function exportToExcel(tableID, filename) {
+        var table = document.getElementById(tableID);
+        var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+        var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'binary'});
+
+        function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+            for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), filename);
+    }
+</script>
+{% endblock %}

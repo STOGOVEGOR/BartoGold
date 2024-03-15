@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Corrective actions
+{% endblock %}
+
+{% block content %}
+    <h1>Corrective actions</h1>
+
+    {% if messages %}
+        <ul>
+            {% for message in messages %}
+                <li class="flash_msg">{{ message }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    <form action="{% url 'corr_edit' action='new' item_id=item_id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">ADD NEW</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Actions</th>
+            <th>Location</th>
+            <th>What to do</th>
+            <th>Who is on charge</th>
+            <th>When to do</th>
+            <th>Status</th>
+            <th>Form</th>
+        </tr>
+        {% for i in rows %}
+            <tr>
+                <td>
+                    <a href="{% url 'corr_edit' action='edit' path=path item_id=item_id edit_id=i.id %}">
+                        <img src="{% static 'img/edit.ico' %}" width="20" height="20" alt="Edit">Edit
+                    </a>
+                    <a href="{% url 'corr_edit' action='delete' path=path item_id=item_id del_id=i.id %}" onclick="return confirm('Are you sure?')">
+                        <img src="{% static 'img/delete.ico' %}" width="20" height="20" alt="Action">Delete
+                    </a>
+                </td>
+                <td>{{ i.location }}</td>
+                <td>{{ i.action }}</td>
+                <td>{{ i.act_by }}</td>
+                <td>{{ i.act_date }}</td>
+                <td>{{ i.status }}</td>
+                <td>
+                    <a href="{% url path action='edit' item_id=item_id %}">View related form</a>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

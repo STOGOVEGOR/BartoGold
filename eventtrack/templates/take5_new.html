@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %}Enter new Take5 data{% endblock %}</h1>
+
+    {% with messages = get_flashed_messages() %}
+     {% if messages %}
+      <ul>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+     {% endif %}
+    {% endwith %}
+
+    <form method="POST" action="{{ url_for('take5_new') }}">
+        {{ form.hidden_tag() }}
+        {{ form.description }} <br>
+
+        {% for subfield in form.qA %}
+            <tr>
+                <td>{{ subfield }}</td>
+                <td>{{ subfield.label }}</td>
+            </tr>
+        {% endfor %}<br>
+
+        {{ form.qB.label }} {{ form.qB }} <br>
+        {{ form.qB.label }} {{ form.qB }} <br>
+        {{ form.submit(class_='button') }} <br>
+    </form>
+{% endblock %}

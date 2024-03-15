@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %}Take5{% endblock %}</h1>
+
+    {% with messages = get_flashed_messages() %}
+     {% if messages %}
+      <ul>
+      {% for message in messages %}
+        <li class="flash_msg">{{ message }}</li>
+      {% endfor %}
+      </ul>
+     {% endif %}
+    {% endwith %}
+
+<form action="{{ url_for('take5_edit', action='new') }}">
+    <button type="submit">ADD NEW</button>
+</form>
+<table>
+    <tr>
+        <th>Actions</th>
+        <th>Hazard level</th>
+        <th>User</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>qA</th>
+        <th>qB</th>
+        <th>qC</th>
+        <th>qD</th>
+        <th>qE</th>
+        <th>qF</th>
+    </tr>
+    {% for i in rows %}
+    <tr>
+        <td><a href="{{ url_for('take5_edit', action='edit', item_id=i.id) }}">
+            <img src="../static/img/edit.ico" width="20" height="20" alt="Edit">Edit  </a></td>
+<!--            <a href="{{ url_for('corr_edit', action='new', path='safe_acts_edit', item_id=i.id) }}">-->
+<!--            <img src="../static/img/add3.ico" width="20" height="20" alt="Action">Action</a></td>-->
+        <td class="hl_{{ i.hazard }}">{{ i.hl.level }}</td>
+        <td>{{ i.u.username }}</td>
+        <td>{{ i.created }}</td>
+        <td>{{ i.updated }}</td>
+        <td>{{ i.qA | replace('0','No') | replace('1','Yes') | replace('2','not app')}}</td>
+        <td>{{ i.qB | replace('0','No') | replace('1','Yes') | replace('2','not app')}}</td>
+        <td>{{ i.qC | replace('0','No') | replace('1','Yes') | replace('2','not app')}}</td>
+        <td>{{ i.qD | replace('0','No') | replace('1','Yes') | replace('2','not app')}}</td>
+        <td>{{ i.qE | replace('0','No') | replace('1','Yes') | replace('2','not app')}}</td>
+        <td>{{ i.qF | replace('0','No') | replace('1','Yes') | replace('2','not app')}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

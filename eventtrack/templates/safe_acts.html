@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %}Safe acts{% endblock %}</h1>
+
+    {% with messages = get_flashed_messages() %}
+     {% if messages %}
+      <ul>
+      {% for message in messages %}
+        <li class="flash_msg">{{ message }}</li>
+      {% endfor %}
+      </ul>
+     {% endif %}
+    {% endwith %}
+
+<form action="{{ url_for('safe_acts_edit', action='new') }}" method="POST">
+    <button type="submit">ADD NEW</button>
+</form>
+<table>
+    <tr>
+        <th>Actions</th>
+        <th>User</th>
+        <th>Created</th>
+        <th>Updated</th>
+        <th>Location</th>
+        <th>Corrective actions</th>
+    </tr>
+    {% for i, k in rows %}
+    <tr>
+        <td><a href="{{ url_for('safe_acts_edit', action='edit', item_id=i.id) }}">
+            <img src="../static/img/edit.ico" width="20" height="20" alt="Edit">Edit  </a>
+            <a href="{{ url_for('corr_edit', action='new', path='safe_acts_edit', item_id=i.id) }}">
+            <img src="../static/img/add3.ico" width="20" height="20" alt="Action">Action</a></td>
+        <td>{{ i.u.username }}</td>
+        <td>{{ i.created }}</td>
+        <td>{{ i.updated }}</td>
+        <td>{{ i.location }}</td>
+        {% if k %}
+        <td><a href="{{ url_for('corr_actions', path='safe_acts_edit', item_id=i.id) }}">{{ k }} entries</a></td>
+        {% else %}
+        <td>Action required</td>
+        {% endif %}
+    </tr>
+    {% endfor %}
+
+</table>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+
+    <h1>{% block title %}Upload XLS Files: {% endblock %}</h1>
+
+    {% for message in messages %}
+        <p style="color: red;">{{ message | safe }}</p>
+    {% endfor %}
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="id_breath_list">{{ form.breath_list.label }}</label><br>
+        {{ form.breath_list }}<br>
+        {% for error in form.breath_list.errors %}
+            <p style="color: red;">{{ error }}</p>
+        {% endfor %}
+        <br>
+        <label for="id_evac_list">{{ form.evac_list.label }}</label><br>
+        {{ form.evac_list }}<br>
+        {% for error in form.evac_list.errors %}
+            <p style="color: red;">{{ error }}</p>
+        {% endfor %}
+        <br>
+        <button type="submit">UPLOAD</button>
+    </form>
+    <p>OR</p>
+    <form action="{% url 'workers_status' %}">
+        <button type="submit">PROCEED EXISTING DATA</button>
+    </form>
+    <br>
+
+{% endblock %}

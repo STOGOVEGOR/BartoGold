@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Welcome!
+{% endblock %}
+
+{% block content %}
+    <h1>Welcome!</h1>
+
+    {% if request.user.is_authenticated %}
+        You are logged in as {{ request.user.username }}.
+    {% else %}
+        Please login.
+    {% endif %}
+    <br>
+{% endblock %}
+

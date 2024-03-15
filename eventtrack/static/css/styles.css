@@ -1,0 +1,195 @@
+:root {
+  --theme-color: #F3BC00; /* Задаем пользовательскую переменную с цветом ссылки ЖЕЛТЫЙ */
+}
+
+.sidenav {
+    height: 100%;
+    width: 200px; /* Ширина боковой панели */
+    position: fixed;
+    top: 140px;
+    left: 0;
+    background-color: #F3F3F3;
+    padding-top: 0px;
+    border-right: 1px solid #ced4da; /* Видимая граница контейнера справа */
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); /* Тень */
+}
+
+.sidenav a {
+    padding: 8px 8px 8px 16px;
+    font-family: Verdana, Tahoma, sans-serif;
+    text-decoration: none;
+    font-size: 18px;
+    color: #000000;
+    display: block;
+    /*background-color: #e9ecef;*/
+}
+
+.sidenav a:hover {
+    color: #EAEAEA;
+    transition-duration: 0.4s;
+    background-color: var(--theme-color); /* фон активной кнопки */
+}
+
+.menu {
+    position: fixed;
+    display: flex;
+    align-items: center; /* Выравнивание по вертикали */
+    border-bottom: 2px outset #ced4da; /* Видимая граница контейнера снизу */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    z-index: 1000; /* убедитесь, что z-index больше, чем у других элементов на странице */
+    background-color: #ffffff; /* задайте цвет фона по вашему усмотрению */
+}
+
+.menu img {
+    margin-top: -10px;
+    margin-bottom: -50px;
+    margin-left: 10px;
+}
+
+/*
+.menu nav {
+    position: fixed;
+    display: flex;
+    align-items: center; /* Выравнивание по вертикали
+}
+*/
+
+.logo-container {
+    margin-right: 100px; /* Отступ справа от логотипа */
+}
+
+.button-container {
+    margin-left: auto; /* Перемещение контейнера кнопки Logout вправо */
+    margin-right: 100px;
+}
+
+.content {
+    margin-left: 220px; /* Ширина левой панели */
+    margin-top: 140px; /* Выравнивание с верхним пространством */
+    padding: 0px;
+}
+
+
+
+/*nav a {
+    color: #707B7C;
+    font-family: Verdana, Tahoma, sans-serif;
+    font-size: 2em;
+    margin-left: 10px;
+    margin-right: 30px;
+    text-shadow: 2px 2px 2px #000000;
+    text-decoration: none;
+}
+nav a:hover {
+    color: #FF8F00;
+}
+nav img {
+    margin-top: -10px;
+    margin-bottom: -50px;
+    margin-left: -10px;
+}*/
+body {
+    background: rgba(255, 255, 255, .8);
+    color: #1B2631;
+    font-size: 1em;
+    border-radius: 5px;
+    padding-left: 1rem;
+    padding-bottom: 1rem;
+}
+html {
+/*    background-image: url('../img/bird_view.jpg'); */
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-attachment: fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    font-family: Arial, Tahoma, sans-serif;
+}
+table, th, td {
+    background: rgba(245, 245, 245, .5);
+/*    color: #000000;  */
+    font-family: Arial, Tahoma, sans-serif;
+    border:1px solid black;
+    border-collapse: collapse;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+}
+button, .button, .btn {
+    border-radius: 10px;
+    padding: 8px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 2px solid var(--theme-color);
+}
+button:hover, .button:hover, .btn:hover{
+    background-color: var(--theme-color);
+    color: white;
+}
+.flash_msg {
+    color: #CF0000;
+    font-size: 1.1em;
+}
+.hl_1 {
+    color: #909497;
+    font-weight: bold;
+}
+.hl_2 {
+    color: #1ABC9C;
+    font-weight: bold;
+}
+.hl_3 {
+    color: #F1C40F;
+    font-weight: bold;
+}
+.hl_4 {
+    color: #E67E22;
+    font-weight: bold;
+}
+.hl_5 {
+    color: #C0392B;
+    font-weight: bold;
+}
+/* FOR WORKERS LIST */
+.row_font_table {
+    font-size: 14px; /* 1111111 Adjust as needed */
+}
+.row_font_title {
+    font-size: 14px;
+    font-weight: bold;
+}
+.breath_column_min {
+    width: 20px;
+}
+.breath_column_mid {
+    width: 160px;
+}
+.file_upload {
+    width: 500px;
+    height: 30px;
+    border-radius: 10px;
+    padding: 8px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 18px;
+    margin: 4px 2px;
+    transition-duration: 0.4s;
+    cursor: pointer;
+    color: black;
+    border: 2px solid grey;
+/*    background-color: white;
+    border: 2px solid #FF8F00; */
+}

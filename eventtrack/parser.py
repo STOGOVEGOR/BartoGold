@@ -17,6 +17,7 @@ def get_workers_list():
     df_evac['EmployeeID'] = pd.to_numeric(df_evac['EmployeeID'], errors='coerce')
     df_breath['Staff ID'] = pd.to_numeric(df_breath['Staff ID'], errors='coerce')
     df_breath = df_breath.rename(columns={'Staff ID': 'StaffID'})
+    df_evac = df_evac.rename(columns={'Work Status': 'WorkStatus'})
 
     # Поиск ошибок в столбце 'Name' df_breath
     mask = ~df_breath['Name'].isin(df_evac['Name'])
@@ -39,7 +40,7 @@ def get_workers_list():
             df_breath.at[index, 'Name'] = df_evac[df_evac['EmployeeID'] == row['StaffID']]['Name'].iloc[0]
 
     # Объединение данных на основе столбца "Name"
-    merged_df = pd.merge(df_evac[['Name', 'Organisation', 'Supervisor', 'Workgroup', 'Work Status', 'EmployeeID']],
+    merged_df = pd.merge(df_evac[['Name', 'Organisation', 'Supervisor', 'Workgroup', 'WorkStatus', 'EmployeeID']],
                          df_breath[['Name', 'Result', 'Staff Name', 'StaffID', 'Date', 'Comment']],
                          how='outer',
                          on='Name')

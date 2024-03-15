@@ -33,6 +33,7 @@
 .menu {
     position: fixed;
     display: flex;
+    justify-content: space-between;
     align-items: center; /* Выравнивание по вертикали */
     border-bottom: 2px outset #ced4da; /* Видимая граница контейнера снизу */
     top: 0;
@@ -63,7 +64,16 @@
 
 .button-container {
     margin-left: auto; /* Перемещение контейнера кнопки Logout вправо */
-    margin-right: 100px;
+    /* margin-right: 100px; */
+}
+
+#clock {
+    font-size: 24px;
+    width: 100px; /* Ширина контейнера */
+    text-align: right;
+    /*height: 30px; /* Высота контейнера */
+    margin-left: 30px; /* Перемещение контейнера кнопки Logout вправо */
+    margin-right: 30px;
 }
 
 .content {

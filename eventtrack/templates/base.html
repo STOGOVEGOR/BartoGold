@@ -10,16 +10,10 @@
 </head>
 <body>
     <div class="menu">
-<!--        <nav>-->
             <div class="logo-container">
                 <a href="{% url 'index' %}"><img src="{% static 'img/logo4.png' %}" width="130" height="130" alt=""></a>
             </div>
-<!--            {% if user.is_authenticated and user.username == 'admin' %}-->
-<!--            <a href="{% url 'upload_xls' %}">Upload XLS</a>-->
-<!--            {% endif %}-->
             {% if user.is_authenticated %}
-<!--            <a href="{% url 'take5' %}">Take5</a>-->
-<!--            <a href="{% url 'safe_acts' %}">Safe acts</a>-->
             <div class="button-container">
                 <form action="{% url 'user_logout' %}" method="post">
                     {% csrf_token %}
@@ -34,8 +28,9 @@
                 </form>
             </div>
             {% endif %}
-<!--        </nav>-->
+            <div id="clock"></div>
     </div>
+
     <div class="sidenav">
         <nav>
             {% if user.is_authenticated and user.username == 'admin' %}
@@ -52,5 +47,17 @@
         {% block content %} {% endblock %}
     </div>
     {% block scripts %}{% endblock %}
+    <script>
+        function updateClock() {
+            var now = new Date();
+            var hours = now.getHours();
+            var minutes = now.getMinutes();
+            var seconds = now.getSeconds();
+            var timeString = hours + ':' + (minutes < 10 ? '0' + minutes : minutes) + ':' + (seconds < 10 ? '0' + seconds : seconds);
+            document.getElementById('clock').textContent = timeString;
+        }
+
+        setInterval(updateClock, 1000);
+    </script>
 </body>
 </html>

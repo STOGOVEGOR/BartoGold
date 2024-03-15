@@ -1,20 +1,24 @@
+import os
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.http import HttpResponse
+
+import subprocess
+import hmac
+import hashlib
 
 from .messages import data_format_error
 from .models import User, SafeAct, Take5
 from .forms import LoginForm, RegisterForm, Take5Form, SafeActsForm, CorrectiveForm, UploadXLSForm
 from .parser import validate_xls, get_workers_list, check_data_for_errors, counters
-from django.contrib import messages
 from .settings import MEDIA_ROOT
 
-from django.shortcuts import render, redirect
-from .forms import UploadXLSForm
-from django.contrib.auth.decorators import login_required
-import os
 
 def index(request):
     return render(request, 'index.html')
@@ -120,3 +124,22 @@ def workers_status(request):
         messages.error(request, data_format_error)
         return redirect('upload_xls')
 
+
+@csrf_exempt
+def webhook(request):
+    signature_header = request.headers.get('x-hub-signature-256')
+    payload_body = request.body
+
+    verify_signature(payload_body, os.getenv("GIT_WEBHOOK_TOKEN"), signature_header)
+
+    # If the signature is verified, continue processing the webhook payload
+    # Your webhook handling logic goes here
+    subprocess.run(["/home/BartoGold/update_and_restart.sh"])
+
+    return HttpResponse('Webhook received successfully!', status=200)
+
+
+def verify_signature(payload, secret, signature):
+    expected_signature = 'sha256=' + hmac.new(secret.encode('utf-8'), payload, hashlib.sha256).hexdigest()
+    if signature != expected_signature:
+        raise ValueError('Invalid signature')

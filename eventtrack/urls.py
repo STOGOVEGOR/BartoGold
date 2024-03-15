@@ -6,6 +6,7 @@ from . import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('webhook/', views.webhook, name='webhook'),
     path('', views.index, name='index'),
     path('login/', views.user_login, name='user_login'),
     path('logout/', views.user_logout, name='user_logout'),

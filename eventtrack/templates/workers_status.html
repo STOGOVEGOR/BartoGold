@@ -42,11 +42,11 @@
         {% for row in rows %}
             <tr class="row_font_table" style="background-color:
                 {% if row.Status == 'DENIED' %}
-                    rgba(255, 0, 0, 0.7);
+                    rgba(255, 0, 0, 0.5);
                 {% elif row.Status == 'ALLOWED' %}
-                    rgba(0, 255, 0, 0.7);
+                    rgba(0, 255, 0, 0.5);
                 {% elif row.Status == 'NOT FOUND' %}
-                    rgba(255, 175, 0, 0.7);
+                    rgba(255, 175, 0, 0.5);
                 {% endif %}
             ">
                 <td style="width: 100px;">{{ row.Date }}</td>

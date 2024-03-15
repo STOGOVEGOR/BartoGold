@@ -73,11 +73,11 @@ def dashboard(request):
 
 
 def take5(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'in_develop.html')
 
 
 def safe_acts(request):
-    return render(request, 'dashboard.html')
+    return render(request, 'in_develop.html')
 
 
 def upload_xls(request):

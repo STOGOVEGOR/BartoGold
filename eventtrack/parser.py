@@ -120,6 +120,17 @@ def counters(df):
         "<span style='font-weight: bold;'>Total rows:</span>": f"<span style='font-weight: bold;'>{total_rows}</span>",
     }
 
-    return count_dict
+    row_dict = {
+        "ALLOWED": status_allowed,
+        "DENIED": status_denied,
+        "NOT FOUND": status_not_found,
+        "NOT SET": status_not_set,
+        "EMPTY ID": empty_id,
+    }
+
+    for key, value in row_dict.items():
+        row_dict[key] = int(value)
+
+    return count_dict, row_dict
 
 # counters(get_workers_list())

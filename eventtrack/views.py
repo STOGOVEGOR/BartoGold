@@ -12,6 +12,7 @@ from django.http import HttpResponse
 import subprocess
 import hmac
 import hashlib
+import json
 
 from .messages import data_format_error
 from .models import User, SafeAct, Take5
@@ -117,9 +118,11 @@ def workers_status(request):
         if errors:
             for error in errors:
                 messages.error(request, error)
-        counter_msg = counters(df)
+        count_dict, row_dict = counters(df)
+        row_dict = json.dumps(row_dict)
         dataset = df.to_dict(orient='records')
-        return render(request, 'workers_status.html', {'rows': dataset, 'count_dict': counter_msg})
+        return render(request, 'workers_status.html',
+                      {'rows': dataset, 'count_dict': count_dict, 'row_dict': row_dict})
     else:
         messages.error(request, data_format_error)
         return redirect('upload_xls')

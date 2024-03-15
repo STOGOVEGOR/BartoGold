@@ -73,7 +73,7 @@ def validate_xls():
     breath_path = os.path.join(MEDIA_ROOT, 'breath.xlsx')
 
     df_evac = pd.read_excel(evac_path)
-    required_columns = {'Name', 'EmployeeID'}
+    required_columns = {'Name', 'EmployeeID', 'Work Status'}
 
     if not required_columns.issubset(df_evac.columns):
         return False

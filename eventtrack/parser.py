@@ -16,6 +16,11 @@ def get_workers_list():
     df_breath['Name'] = df_breath['Staff Name'].apply(lambda x: x.replace(' ', ', ', 1) if isinstance(x, str) and x != 'Invalid Staff ID' else x)
     df_evac['EmployeeID'] = pd.to_numeric(df_evac['EmployeeID'], errors='coerce')
     df_breath['Staff ID'] = pd.to_numeric(df_breath['Staff ID'], errors='coerce')
+
+    df_breath['Time'] = pd.to_datetime(df_breath['Time'], format='%H:%M:%S')
+    max_times = df_breath.groupby('Staff ID', as_index=False)['Time'].max()
+    df_breath = pd.merge(df_breath, max_times, on=['Staff ID', 'Time'], how='inner')
+
     df_breath = df_breath.rename(columns={'Staff ID': 'StaffID'})
     df_evac = df_evac.rename(columns={'Work Status': 'WorkStatus'})
 
@@ -133,4 +138,3 @@ def counters(df):
 
     return count_dict, row_dict
 
-# counters(get_workers_list())

@@ -53,9 +53,15 @@
                 <td style="width: 100px;">{{ row.Status }}</td>
                 <td class="breath_column_mid">{{ row.Workgroup }}</td>
                 <td>{{ row.Name }}</td>
-                <td class="breath_column_min">{{ row.Result }}</td>
+                <td class="breath_column_min" style="color: {% if row.Result > 0 %}red{% else %}black{% endif %}">
+                    {{ row.Result }}</td>
                 <td class="breath_column_mid">{{ row.Organisation }}</td>
-                <td class="breath_column_mid">{{ row.WorkStatus }}</td>
+                <td class="breath_column_mid" style="color:
+                    {% if row.WorkStatus == 'Dayshift - 12' %}green
+                    {% elif row.WorkStatus == 'Dayshift Res -12' %}blue
+                    {% elif 'Nightshift' in row.WorkStatus %}orange
+                    {% else %}black{% endif %}">
+                    {{ row.WorkStatus }}</td>
                 <td>{{ row.Supervisor }}</td>
                 <td>{{ row.EmployeeID|default:row.StaffID }}</td>
             </tr>

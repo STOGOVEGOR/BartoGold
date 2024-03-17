@@ -1,4 +1,17 @@
 {% extends 'base.html' %}
+{% block scriptshead %}
+    {% load static %}
+    <script src="{% static 'js/chart.umd.js' %}"></script>
+{% endblock %}
 {% block content %}
-    <h1>{% block title %}You are logged in!{% endblock %}</h1>
+    <div class="container">
+        <div class="box">
+            <canvas id="myChart" height="400"></canvas>
+            <script src="{% static 'scripts/barchart.js' %}"></script>
+        </div>
+        <div class="box">Container 2</div>
+        <div class="box">Container 3</div>
+        <div class="box">Container 4</div>
+    </div>
+
 {% endblock %}

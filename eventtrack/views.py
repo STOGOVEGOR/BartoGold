@@ -1,4 +1,6 @@
 import os
+import random
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
 from django.contrib.auth.forms import AuthenticationForm
@@ -7,7 +9,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib import messages
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 import subprocess
 import hmac
@@ -146,3 +148,34 @@ def verify_signature(payload, secret, signature):
     expected_signature = 'sha256=' + hmac.new(secret.encode('utf-8'), payload, hashlib.sha256).hexdigest()
     if signature != expected_signature:
         raise ValueError('Invalid signature')
+
+
+TANK1 = [70, 'up', 90]
+TANK2 = [50, 'down', 30]
+
+
+@csrf_exempt  # Декоратор для обхода проверки CSRF (при необходимости)
+def get_tanks_data(request):
+    global TANK1, TANK2
+
+    def tank_level(tank):
+        if tank[1] == 'up':
+            tank[0] += 3
+            if tank[0] >= tank[2]:
+                tank[1] = 'down'
+                tank[2] = random.randint(30, 50)
+        else:
+            tank[0] -= 3
+            if tank[0] <= tank[2]:
+                tank[1] = 'up'
+                tank[2] = random.randint(70, 90)
+        return tank
+
+    TANK1 = tank_level(TANK1)
+    TANK2 = tank_level(TANK2)
+
+    data = {
+        'tank1': TANK1[0],
+        'tank2': TANK2[0]
+    }
+    return JsonResponse(data)

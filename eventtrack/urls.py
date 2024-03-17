@@ -15,6 +15,8 @@ urlpatterns = [
     path('safe_acts/', views.safe_acts, name='safe_acts'),
     path('upload_xls/', views.upload_xls, name='upload_xls'),
     path('workers_status/', views.workers_status, name='workers_status'),
+    path('dashboard/', views.dashboard, name='dashboard'),
+    path('get_tanks_data/', views.get_tanks_data, name='get_tanks_data')
     # Define other routes similarly
 ]
 

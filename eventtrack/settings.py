@@ -118,9 +118,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-STATIC_URL = 'static/'  # 'eventtrack/static/'
+STATIC_URL = '/static/'  # 'eventtrack/static/'
 # MEDIA_URL = 'eventtrack/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'eventtrack/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, '/eventtrack/media')
 # STATIC_ROOT = BASE_DIR / '/eventtrack/static/'
 STATICFILES_DIRS = [
     BASE_DIR / "eventtrack/static/",

@@ -121,11 +121,10 @@ USE_TZ = True
 STATIC_URL = 'static/'  # 'eventtrack/static/'
 # MEDIA_URL = 'eventtrack/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'eventtrack/media')
-# STATIC_ROOT = BASE_DIR / 'eventtrack/static'
 # STATIC_ROOT = BASE_DIR / '/eventtrack/static/'
-# STATICFILES_DIRS = [
-#     BASE_DIR / "eventtrack/static/",
-# ]
+STATICFILES_DIRS = [
+    BASE_DIR / "eventtrack/static/",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

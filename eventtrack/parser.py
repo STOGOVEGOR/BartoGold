@@ -24,10 +24,11 @@ def get_workers_list():
     df_breath = df_breath.rename(columns={'Staff ID': 'StaffID'})
     df_evac = df_evac.rename(columns={'Work Status': 'WorkStatus'})
 
-    # Поиск ошибок в столбце 'Name' df_breath
+    # mark 'Name' df_breath who not in evac list
     mask = ~df_breath['Name'].isin(df_evac['Name'])
     df_breath.loc[mask, 'Comment'] = 'ERROR'
 
+    # check correlations with evac list
     for index, row in df_breath.iterrows():
         if row['Comment'] == 'ERROR':
             staff_id = row['StaffID']
@@ -66,6 +67,7 @@ def get_workers_list():
     merged_df.loc[merged_df['Result'] == 0, 'Status'] = 'ALLOWED'
     merged_df.loc[merged_df['Staff Name'] == 'Invalid Staff ID', 'Status'] = 'NOT FOUND'
     merged_df.loc[merged_df['Comment'] == 'ERROR', 'Status'] = 'NOT FOUND'
+    merged_df.loc[merged_df['Comment'] == 'OK', 'Status'] = 'ALLOWED'
 
     status_order = {'DENIED': 1, 'NOT FOUND': 2, 'ALLOWED': 3, 'NOT SET': 4}
     merged_df = merged_df.sort_values(by=['Status', 'Name'], key=lambda x: x.map(status_order))

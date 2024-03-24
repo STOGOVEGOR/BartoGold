@@ -18,8 +18,8 @@ def get_workers_list():
     df_breath['Staff ID'] = pd.to_numeric(df_breath['Staff ID'], errors='coerce')
 
     df_breath['Time'] = pd.to_datetime(df_breath['Time'], format='%H:%M:%S')
-    max_times = df_breath.groupby('Staff ID', as_index=False)['Time'].max()
-    df_breath = pd.merge(df_breath, max_times, on=['Staff ID', 'Time'], how='inner')
+    max_times = df_breath.groupby(['Staff ID', 'Name'], as_index=False)['Time'].max()
+    df_breath = pd.merge(df_breath, max_times, on=['Staff ID', 'Name', 'Time'], how='inner')
 
     df_breath = df_breath.rename(columns={'Staff ID': 'StaffID'})
     df_evac = df_evac.rename(columns={'Work Status': 'WorkStatus'})
@@ -53,6 +53,13 @@ def get_workers_list():
 
     merged_df['EmployeeID'] = merged_df['EmployeeID'].fillna('').apply(lambda x: '{:.0f}'.format(x) if x != '' else '')
     merged_df['StaffID'] = merged_df['StaffID'].fillna('').apply(lambda x: '{:.0f}'.format(x) if x != '' else '')
+
+    # Отбор строк, где EmployeeID не уникален и не является пустым значением
+    duplicate_employee_ids = merged_df.duplicated(subset=['EmployeeID'], keep=False) & merged_df['EmployeeID'].notna()
+
+    # Замена значений EmployeeID на StaffID, если StaffID не является пустым значением
+    merged_df.loc[duplicate_employee_ids, 'EmployeeID'] = merged_df.loc[duplicate_employee_ids, 'StaffID']
+
 
     # add "Status" by default
     merged_df['Status'] = 'NOT SET'
@@ -99,9 +106,13 @@ def check_data_for_errors(df):
     filtered1_df = df[df['EmployeeID'] != '']
     filtered2_df = df[df['Name'] != '']
 
-    # Проверить, есть ли дубликаты в столбце 'EmployeeID', игнорируя пустые строки
-    if filtered1_df.duplicated(subset=['EmployeeID']).any():
-        errors_list.append('Duplicated IDs in evacuate.xlsx')
+    # Найти дубликаты EmployeeID
+    duplicates = filtered1_df[filtered1_df.duplicated(subset=['EmployeeID'], keep=False)]
+
+    # Сгруппировать дублирующиеся значения EmployeeID и собрать их в список
+    duplicates_list = duplicates.groupby('EmployeeID')['EmployeeID'].apply(list).tolist()
+    if duplicates_list:
+        errors_list.append(f"Duplicated IDs in evacuate.xlsx ({', '.join(map(str, duplicates_list))})")
 
     # Проверить, есть ли дубликаты в столбце 'Name', игнорируя пустые строки
     if filtered2_df.duplicated(subset=['Name']).any():

@@ -130,10 +130,10 @@ def counters(df):
     empty_id = (df['EmployeeID'] == '').sum()
 
     count_dict = {
-        "Workers with <span style='color: green;'>ALLOWED</span> status": status_allowed,
-        "Workers with <span style='color: red;'>DENIED</span> status": status_denied,
-        "Workers who were <span style='color: orange;'>NOT FOUND</span> on the Evacuation list": status_not_found,
-        "Workers in Evacuation list but not in Breath analyzer report": status_not_set,
+        "Staff with <span style='color: green;'>ALLOWED</span> status": status_allowed,
+        "Staff with <span style='color: red;'>DENIED</span> status": status_denied,
+        "Staff who were <span style='color: orange;'>NOT FOUND</span> on the Evacuation list": status_not_found,
+        "Staff in Evacuation list but not in Breath analyzer report": status_not_set,
         "Rows with empty Employee ID": empty_id,
         "<span style='font-weight: bold;'>Total rows:</span>": f"<span style='font-weight: bold;'>{total_rows}</span>",
     }

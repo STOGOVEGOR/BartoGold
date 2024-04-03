@@ -106,13 +106,13 @@ def upload_xls(request):
             # Далее обработка файлов и другие действия, которые вам нужны
 
             # После успешной загрузки файлов, перенаправляем на другую страницу
-            return redirect('workers_status')
+            return redirect('staff_status')
     else:
         form = UploadXLSForm()
     return render(request, 'upload_xls.html', {'form': form})
 
 
-def workers_status(request):
+def staff_status(request):
     if validate_xls():
         df = get_workers_list()
         errors = check_data_for_errors(df)
@@ -123,7 +123,7 @@ def workers_status(request):
         count_dict, row_dict = counters(df)
         row_dict = json.dumps(row_dict)
         dataset = df.to_dict(orient='records')
-        return render(request, 'workers_status.html',
+        return render(request, 'staff_status.html',
                       {'rows': dataset, 'count_dict': count_dict, 'row_dict': row_dict})
     else:
         messages.error(request, data_format_error)

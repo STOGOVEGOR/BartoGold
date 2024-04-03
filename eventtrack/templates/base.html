@@ -36,11 +36,11 @@
         <nav>
 <!--            {% if user.is_authenticated and user.username == 'admin' %}-->
 <!--                <a href="{% url 'upload_xls' %}">Upload XLS</a>-->
-<!--                <a href="{% url 'workers_status' %}">Workers status</a>-->
+<!--                <a href="{% url 'staff_status' %}">Workers status</a>-->
 <!--            {% endif %}-->
             {% if user.is_authenticated %}
                 <a href="{% url 'upload_xls' %}">Upload XLS</a>
-                <a href="{% url 'workers_status' %}">Staff status</a>
+                <a href="{% url 'staff_status' %}">Staff status</a>
 
 <!--                <a href="{% url 'dashboard' %}">Dashboard</a>-->
 <!--                <a href="{% url 'safe_acts' %}">Safe acts</a>-->

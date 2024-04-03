@@ -78,14 +78,14 @@
             });
         </script>
         </div>
-        <button style="margin-right: 20px; height: auto; width: 100px;" id="export-button" onclick="exportToExcel('workers_status', 'workers_status.xlsx')">Export to Excel</button>
+        <button style="margin-right: 20px; height: auto; width: 100px;" id="export-button" onclick="exportToExcel('staff_status', 'staff_status.xlsx')">Export to Excel</button>
     </div>
 
     {% for message in messages %}
         <p class="flash_msg">{{ message | safe }}</p>
     {% endfor %}
     <br>
-    <table id="workers_status">
+    <table id="staff_status">
         <tr class="row_font_title">
             <th>Date</th>
             <th>Status</th>

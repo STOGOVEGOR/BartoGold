@@ -1,5 +1,5 @@
 # UPD
-# 8
+# 9
 
 # TODO
 chmod +x pull_and_restart.sh

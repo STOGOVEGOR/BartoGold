@@ -1,4 +1,6 @@
 import os
+import logging
+from logging.config import dictConfig
 from pathlib import Path
 from dotenv import load_dotenv
 
@@ -7,9 +9,28 @@ load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOG_PATH = os.path.join(BASE_DIR, 'logfile.log')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'INFO',  # Уровень логирования INFO или выше
+            'class': 'logging.FileHandler',
+            'filename': LOG_PATH,
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'INFO',  # Уровень логирования INFO или выше
+            'propagate': True,
+        },
+    },
+}
+
+dictConfig(LOGGING)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-l5wf$k@hz8r8_bvaujw+i8xy4w!d(aegl=i8cu2@rm!k#r1m7i'

@@ -23,6 +23,9 @@ from .forms import LoginForm, RegisterForm, Take5Form, SafeActsForm, CorrectiveF
 from .parser import validate_xls, get_workers_list, check_data_for_errors, counters
 from .settings import MEDIA_ROOT
 
+import logging
+logger = logging.getLogger(__name__)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pull_and_restart_script = os.path.join(BASE_DIR, 'pull_and_restart.sh')
 
@@ -165,8 +168,10 @@ async def process_webhook_payload():
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )
-    print('process: ', process)
-    await process.communicate()
+    logger.info('process: %s', process)  # Запись в лог-файл
+    stdout, stderr = await process.communicate()
+    logger.info('stdout: %s', stdout.decode())  # Запись в лог-файл
+    logger.error('stderr: %s', stderr.decode())  # Запись в лог-файл
 
 
 def verify_signature(payload, secret, signature):

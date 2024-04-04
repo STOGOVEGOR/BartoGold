@@ -144,7 +144,7 @@ def staff_status(request):
 async def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
     payload_body = request.body
-    print(payload_body)
+
     if not signature_header or not payload_body:
         return HttpResponse('Bad request.', status=400)
 
@@ -155,7 +155,6 @@ async def webhook(request):
 
     # If the signature is verified, continue processing the webhook payload
     # Your webhook handling logic goes here
-    print(f'before compare: *{ref_value}* and *{os.getenv("GIT_BRANCH")}*')
     if ref_value == os.getenv("GIT_BRANCH"):
         asyncio.create_task(process_webhook_payload())
 

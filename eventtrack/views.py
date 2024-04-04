@@ -23,6 +23,9 @@ from .forms import LoginForm, RegisterForm, Take5Form, SafeActsForm, CorrectiveF
 from .parser import validate_xls, get_workers_list, check_data_for_errors, counters
 from .settings import MEDIA_ROOT
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+update_and_restart_script = os.path.join(BASE_DIR, 'update_and_restart.sh')
+
 
 def index(request):
     return render(request, 'index.html')
@@ -149,7 +152,7 @@ async def webhook(request):
 
 async def process_webhook_payload():
     process = await asyncio.create_subprocess_exec(
-        "/home/BartoGold/update_and_restart.sh",
+        update_and_restart_script,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )

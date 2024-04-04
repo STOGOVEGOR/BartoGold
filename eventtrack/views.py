@@ -1,5 +1,6 @@
 import os
 import random
+import asyncio
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -21,6 +22,9 @@ from .models import User, SafeAct, Take5
 from .forms import LoginForm, RegisterForm, Take5Form, SafeActsForm, CorrectiveForm, UploadXLSForm
 from .parser import validate_xls, get_workers_list, check_data_for_errors, counters
 from .settings import MEDIA_ROOT
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+pull_and_restart_script = os.path.join(BASE_DIR, 'pull_and_restart.sh')
 
 
 def index(request):
@@ -93,19 +97,21 @@ def upload_xls(request):
             breath_filename = 'breath.xlsx'
             evac_filename = 'evac.xlsx'
 
-            destination_path = os.path.join(MEDIA_ROOT, breath_filename)
-            with open(destination_path, 'wb+') as destination:
+            username = request.user.username  # Получаем имя пользователя
+            user_media_dir = os.path.join(MEDIA_ROOT, username)  # Путь к поддиректории пользователя
+            os.makedirs(user_media_dir, exist_ok=True)  # Создаем поддиректорию, если она не существует
+
+            breath_path = os.path.join(user_media_dir, breath_filename)
+            evac_path = os.path.join(user_media_dir, evac_filename)
+
+            with open(breath_path, 'wb+') as destination:
                 for chunk in breath_file.chunks():
                     destination.write(chunk)
 
-            destination_path = os.path.join(MEDIA_ROOT, evac_filename)
-            with open(destination_path, 'wb+') as destination:
+            with open(evac_path, 'wb+') as destination:
                 for chunk in evac_file.chunks():
                     destination.write(chunk)
 
-            # Далее обработка файлов и другие действия, которые вам нужны
-
-            # После успешной загрузки файлов, перенаправляем на другую страницу
             return redirect('staff_status')
     else:
         form = UploadXLSForm()
@@ -113,8 +119,9 @@ def upload_xls(request):
 
 
 def staff_status(request):
-    if validate_xls():
-        df = get_workers_list()
+    username = request.user.username
+    if validate_xls(username):
+        df = get_workers_list(username)
         errors = check_data_for_errors(df)
         # errors = None
         if errors:
@@ -131,17 +138,29 @@ def staff_status(request):
 
 
 @csrf_exempt
-def webhook(request):
+async def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
     payload_body = request.body
+    payload_data = json.loads(payload_body)
+    ref_value = payload_data.get('ref')
 
     verify_signature(payload_body, os.getenv("GIT_WEBHOOK_TOKEN"), signature_header)
 
     # If the signature is verified, continue processing the webhook payload
     # Your webhook handling logic goes here
-    subprocess.run(["/home/BartoGold/update_and_restart.sh"])
+    if ref_value == os.getenv("GIT_BRANCH"):
+        asyncio.create_task(process_webhook_payload())
 
-    return HttpResponse('Webhook received successfully!', status=200)
+    return HttpResponse(f'Webhook for {ref_value} received successfully!', status=200)
+
+
+async def process_webhook_payload():
+    process = await asyncio.create_subprocess_exec(
+        pull_and_restart_script,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    await process.communicate()
 
 
 def verify_signature(payload, secret, signature):

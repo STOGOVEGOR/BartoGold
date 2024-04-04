@@ -135,6 +135,8 @@ def staff_status(request):
 async def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
     payload_body = request.body
+    payload_data = json.loads(payload_body)
+    ref_value = payload_data.get('ref')
 
     verify_signature(payload_body, os.getenv("GIT_WEBHOOK_TOKEN"), signature_header)
 
@@ -142,12 +144,10 @@ async def webhook(request):
     # Your webhook handling logic goes here
     asyncio.create_task(process_webhook_payload())
 
-    return HttpResponse('Webhook received successfully!', status=200)
+    return HttpResponse(f'Webhook for {ref_value} received successfully!', status=200)
 
 
 async def process_webhook_payload():
-    # await asyncio.sleep(0)  # Эмуляция долгой операции
-    # subprocess.run(["/home/BartoGold/update_and_restart.sh"])
     process = await asyncio.create_subprocess_exec(
         "/home/BartoGold/update_and_restart.sh",
         stdout=asyncio.subprocess.PIPE,

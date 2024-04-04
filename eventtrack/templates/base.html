@@ -15,6 +15,10 @@
                 <a href="{% url 'index' %}"><img src="{% static 'img/logo4.png' %}" width="130" height="130" alt=""></a>
             </div>
             {% if user.is_authenticated %}
+            <div class="auth-container">
+                You are logged in as:<br>
+                <strong style="font-size: 14px;">{{ user.username }}</strong>
+            </div>
             <div class="button-container">
                 <form action="{% url 'user_logout' %}" method="post">
                     {% csrf_token %}
@@ -22,6 +26,10 @@
                 </form>
             </div>
             {% else %}
+            <div class="auth-container">
+                You are not logged in.<br>
+                <strong style="font-size: 14px;">>>></strong>
+            </div>
             <div class="button-container">
                 <form action="{% url 'user_login' %}" method="post">
                     {% csrf_token %}

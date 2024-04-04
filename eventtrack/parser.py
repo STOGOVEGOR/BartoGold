@@ -5,10 +5,12 @@ import pandas as pd
 pd.set_option('display.max_columns', 10)
 
 
-def get_workers_list():
+def get_workers_list(username):
     # load data
-    evac_path = os.path.join(MEDIA_ROOT, 'evac.xlsx')
-    breath_path = os.path.join(MEDIA_ROOT, 'breath.xlsx')
+    user_media_dir = os.path.join(MEDIA_ROOT, username)
+
+    evac_path = os.path.join(user_media_dir, 'evac.xlsx')
+    breath_path = os.path.join(user_media_dir, 'breath.xlsx')
 
     df_evac = pd.read_excel(evac_path)
     df_breath = pd.read_excel(breath_path)
@@ -82,9 +84,13 @@ def get_workers_list():
     return merged_df
 
 
-def validate_xls():
-    evac_path = os.path.join(MEDIA_ROOT, 'evac.xlsx')
-    breath_path = os.path.join(MEDIA_ROOT, 'breath.xlsx')
+def validate_xls(username):
+    user_media_dir = os.path.join(MEDIA_ROOT, username)
+    evac_path = os.path.join(user_media_dir, 'evac.xlsx')
+    breath_path = os.path.join(user_media_dir, 'breath.xlsx')
+
+    if not os.path.exists(evac_path) or not os.path.exists(breath_path):
+        return False
 
     df_evac = pd.read_excel(evac_path)
     required_columns = {'Name', 'EmployeeID', 'Work Status'}

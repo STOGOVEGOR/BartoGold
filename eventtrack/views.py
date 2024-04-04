@@ -97,19 +97,21 @@ def upload_xls(request):
             breath_filename = 'breath.xlsx'
             evac_filename = 'evac.xlsx'
 
-            destination_path = os.path.join(MEDIA_ROOT, breath_filename)
-            with open(destination_path, 'wb+') as destination:
+            username = request.user.username  # Получаем имя пользователя
+            user_media_dir = os.path.join(MEDIA_ROOT, username)  # Путь к поддиректории пользователя
+            os.makedirs(user_media_dir, exist_ok=True)  # Создаем поддиректорию, если она не существует
+
+            breath_path = os.path.join(user_media_dir, breath_filename)
+            evac_path = os.path.join(user_media_dir, evac_filename)
+
+            with open(breath_path, 'wb+') as destination:
                 for chunk in breath_file.chunks():
                     destination.write(chunk)
 
-            destination_path = os.path.join(MEDIA_ROOT, evac_filename)
-            with open(destination_path, 'wb+') as destination:
+            with open(evac_path, 'wb+') as destination:
                 for chunk in evac_file.chunks():
                     destination.write(chunk)
 
-            # Далее обработка файлов и другие действия, которые вам нужны
-
-            # После успешной загрузки файлов, перенаправляем на другую страницу
             return redirect('staff_status')
     else:
         form = UploadXLSForm()
@@ -117,8 +119,9 @@ def upload_xls(request):
 
 
 def staff_status(request):
-    if validate_xls():
-        df = get_workers_list()
+    username = request.user.username
+    if validate_xls(username):
+        df = get_workers_list(username)
         errors = check_data_for_errors(df)
         # errors = None
         if errors:

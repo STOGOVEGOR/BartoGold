@@ -25,6 +25,7 @@ from .settings import MEDIA_ROOT
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pull_and_restart_script = os.path.join(BASE_DIR, 'pull_and_restart.sh')
+print('========>>>', pull_and_restart_script)
 
 
 def index(request):
@@ -143,7 +144,7 @@ async def webhook(request):
     payload_body = request.body
 
     if not signature_header or not payload_body:
-        return HttpResponse('This is not a valid address', status=400)
+        return HttpResponse('Bad request.', status=400)
 
     payload_data = json.loads(payload_body)
     ref_value = payload_data.get('ref')
@@ -152,6 +153,7 @@ async def webhook(request):
 
     # If the signature is verified, continue processing the webhook payload
     # Your webhook handling logic goes here
+    print('========>>>', pull_and_restart_script)
     if ref_value == os.getenv("GIT_BRANCH"):
         asyncio.create_task(process_webhook_payload())
 

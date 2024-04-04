@@ -1,5 +1,6 @@
 import os
 import random
+import asyncio
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -139,9 +140,14 @@ def webhook(request):
 
     # If the signature is verified, continue processing the webhook payload
     # Your webhook handling logic goes here
-    subprocess.run(["/home/BartoGold/update_and_restart.sh"])
+    asyncio.create_task(process_webhook_payload())
 
     return HttpResponse('Webhook received successfully!', status=200)
+
+
+async def process_webhook_payload():
+    # await asyncio.sleep(0)  # Эмуляция долгой операции
+    subprocess.run(["/home/BartoGold/update_and_restart.sh"])
 
 
 def verify_signature(payload, secret, signature):

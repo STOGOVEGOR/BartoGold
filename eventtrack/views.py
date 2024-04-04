@@ -147,7 +147,13 @@ async def webhook(request):
 
 async def process_webhook_payload():
     # await asyncio.sleep(0)  # Эмуляция долгой операции
-    subprocess.run(["/home/BartoGold/update_and_restart.sh"])
+    # subprocess.run(["/home/BartoGold/update_and_restart.sh"])
+    process = await asyncio.create_subprocess_exec(
+        "/home/BartoGold/update_and_restart.sh",
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE
+    )
+    await process.communicate()
 
 
 def verify_signature(payload, secret, signature):

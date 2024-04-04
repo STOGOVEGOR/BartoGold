@@ -132,7 +132,7 @@ def staff_status(request):
 
 
 @csrf_exempt
-def webhook(request):
+async def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
     payload_body = request.body
 

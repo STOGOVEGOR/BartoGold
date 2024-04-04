@@ -141,6 +141,10 @@ def staff_status(request):
 async def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
     payload_body = request.body
+
+    if not signature_header or not payload_body:
+        return HttpResponse('This is not a valid address', status=400)
+
     payload_data = json.loads(payload_body)
     ref_value = payload_data.get('ref')
 

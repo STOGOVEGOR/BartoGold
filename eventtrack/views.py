@@ -24,7 +24,7 @@ from .parser import validate_xls, get_workers_list, check_data_for_errors, count
 from .settings import MEDIA_ROOT
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-update_and_restart_script = os.path.join(BASE_DIR, 'update_and_restart.sh')
+pull_and_restart_script = os.path.join(BASE_DIR, 'pull_and_restart.sh')
 
 
 def index(request):
@@ -145,14 +145,15 @@ async def webhook(request):
 
     # If the signature is verified, continue processing the webhook payload
     # Your webhook handling logic goes here
-    asyncio.create_task(process_webhook_payload())
+    if ref_value == os.getenv("GIT_BRANCH"):
+        asyncio.create_task(process_webhook_payload())
 
     return HttpResponse(f'Webhook for {ref_value} received successfully!', status=200)
 
 
 async def process_webhook_payload():
     process = await asyncio.create_subprocess_exec(
-        update_and_restart_script,
+        pull_and_restart_script,
         stdout=asyncio.subprocess.PIPE,
         stderr=asyncio.subprocess.PIPE
     )

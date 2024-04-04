@@ -134,7 +134,8 @@ def staff_status(request):
 @csrf_exempt
 async def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
-    payload_body = await request.body
+    # payload_body = request.body
+    payload_body = await request.read()
 
     verify_signature(payload_body, os.getenv("GIT_WEBHOOK_TOKEN"), signature_header)
 

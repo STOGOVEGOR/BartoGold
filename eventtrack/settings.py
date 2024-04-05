@@ -16,7 +16,7 @@ LOGGING = {
     'disable_existing_loggers': False,
     'handlers': {
         'file': {
-            'level': 'INFO',  # Уровень логирования INFO или выше
+            'level': 'INFO',  # Уровень логирования DEBUG или выше
             'class': 'logging.FileHandler',
             'filename': LOG_PATH,
         },
@@ -24,7 +24,7 @@ LOGGING = {
     'loggers': {
         'django': {
             'handlers': ['file'],
-            'level': 'INFO',  # Уровень логирования INFO или выше
+            'level': 'INFO',  # Уровень логирования DEBUG или выше
             'propagate': True,
         },
     },

@@ -1,6 +1,5 @@
 import os
 import random
-import asyncio
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.hashers import make_password
@@ -25,6 +24,7 @@ from .settings import MEDIA_ROOT
 
 import logging
 logger = logging.getLogger(__name__)
+
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pull_and_restart_script = os.path.join(BASE_DIR, 'pull_and_restart.sh')
@@ -141,7 +141,7 @@ def staff_status(request):
 
 
 @csrf_exempt
-async def webhook(request):
+def webhook(request):
     signature_header = request.headers.get('x-hub-signature-256')
     payload_body = request.body
 
@@ -156,21 +156,18 @@ async def webhook(request):
     # If the signature is verified, continue processing the webhook payload
     # Your webhook handling logic goes here
     if ref_value == os.getenv("GIT_BRANCH"):
-        asyncio.create_task(process_webhook_payload())
+        process_webhook_payload()
 
     return HttpResponse(f'Webhook for {ref_value} received successfully!', status=200)
 
 
-async def process_webhook_payload():
-    process = await asyncio.create_subprocess_exec(
+def process_webhook_payload():
+    process = subprocess.Popen(
         pull_and_restart_script,
-        stdout=asyncio.subprocess.PIPE,
-        stderr=asyncio.subprocess.PIPE
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
     )
-    logger.info('process: %s', process)  # Запись в лог-файл
-    stdout, stderr = await process.communicate()
-    logger.info('stdout: %s', stdout.decode())  # Запись в лог-файл
-    logger.error('stderr: %s', stderr.decode())  # Запись в лог-файл
+    stdout, stderr = process.communicate()
 
 
 def verify_signature(payload, secret, signature):

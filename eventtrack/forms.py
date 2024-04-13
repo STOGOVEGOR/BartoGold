@@ -47,9 +47,9 @@ class UploadXLSForm(forms.Form):
                                   widget=forms.ClearableFileInput(
                                       attrs={
                                           'accept': '.xls, .xlsx',
-                                          'style': 'font-size: 16px; color: orange; width: 500px; height: 30px;'}))
+                                          'style': 'font-size: 16px; color: #00428a; width: 500px; height: 30px;'}))
     evac_list = forms.FileField(label='2. Evacuation list',
                                 widget=forms.ClearableFileInput(
                                     attrs={
                                         'accept': '.xls, .xlsx',
-                                        'style': 'font-size: 16px; color: orange; width: 500px; height: 30px;'}))
+                                        'style': 'font-size: 16px; color: #00428a; width: 500px; height: 30px;'}))

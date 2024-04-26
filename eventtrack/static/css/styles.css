@@ -1,8 +1,8 @@
 :root {
   /*--theme-color: #F3BC00; /* Задаем пользовательскую переменную с цветом ссылки ЖЕЛТЫЙ */
-  --theme-color: #007bff; /* main theme color BLUE */
-  --theme-dark-color: #00428a; /* main theme color BLUE */
-  --menu-text-color: #808080; /* text DARK GREY */
+  --theme-color: #007bff; /* main theme color BLUE var(--theme-color) */
+  --theme-dark-color: #00428a; /* main theme color BLUE var(--theme-dark-color) */
+  --menu-text-color: #808080; /* text DARK GREY  var(--menu-text-color) */
   --menu-back: #EAEAEA; /* text DARK GREY */
   --font-choice: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Arial, Tahoma, sans-serif; */
 }
@@ -206,6 +206,28 @@ button:hover, .button:hover, .btn:hover{
     margin-right: 10px;
 }
 
+.big-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    width: 180px; /* Ширина кнопки */
+    height: 90px; /* Высота кнопки */
+    margin: 20px 20px auto 0;
+    background-color: #007bff; /* Синий цвет фона */
+    color: #fff; /* Белый цвет текста */
+    border: none; /* Убираем границу */
+    border-radius: 5px; /* Скругление углов */
+    font-size: 26px; /* Размер шрифта */
+    cursor: pointer; /* Курсор при наведении */
+    text-align: center; /* Выравнивание текста по центру */
+/*    line-height: 50px; /* Высота текста */
+}
+
+.big-button:hover {
+    background-color: #0056b3; /* Темно-синий цвет фона */
+}
+
 .flash_msg {
     color: #CF0000;
     font-size: 1.1em;
@@ -262,13 +284,8 @@ button:hover, .button:hover, .btn:hover{
 /*    background-color: white;
     border: 2px solid #FF8F00; */
 }
-/*
-canvas#myChart {
-    width: 200px;
-    height: 200px;
-}
-*/
-.container {
+
+.container_dia {
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
@@ -279,4 +296,129 @@ canvas#myChart {
     height: 300px;
     margin-bottom: 20px;
     padding: 20px;
+}
+
+/* ======== Q&A in house form ========== */
+.my_heading {
+    font-size: 1em; /* Размер шрифта, аналогичный h5 */
+    font-weight: bold;
+    margin-bottom: 0; /* Устанавливаем нижний отступ на 0 */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    max-width: 440px;
+    margin: 0px;
+    font-size: 16px;
+    /* margin: -10px; /* Компенсация отрицательных отступов элементов */
+}
+
+.item_label {
+    flex-grow: 1; /* Элемент 1 будет растягиваться */
+    min-width: 0; /* Установите минимальную ширину */
+    max-width: 320px;
+    flex: 1 0 200px; /* Каждый элемент будет занимать минимум 200px */
+    margin: 2px; /* Внешний отступ между элементами */
+    padding: 2px; /* Внутренний отступ для содержимого */
+    border-bottom: 1px solid #ddd;
+}
+
+.item_radio {
+    display: flex;
+    flex-shrink: 0; /* Элемент 2 не будет сжиматься */
+    max-width: 115px; /* Установите минимальную ширину */
+    flex: 1 0 50px;
+    margin: 2px; /* Внешний отступ между элементами */
+    padding: 1px; /* Внутренний отступ для содержимого */
+    border: 0px solid #ddd; /* Границы для элементов */
+}
+
+select {
+    /* Общие стили */
+    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+    line-height: 1.5;
+    font-size: 16px;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    background-color: #fff;
+    color: #495057;
+    /* Убираем стандартный фон, стрелку и круговую рамку в Chrome и Safari */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* Добавляем кастомный фон и стрелку */
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 8 8"><path fill="%23333" d="M4 6l4-4H0z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 8px;
+}
+
+/* Стили при наведении */
+select:hover {
+    border-color: #b6b6b6;
+}
+
+/* Стили при фокусе */
+select:focus {
+    border-color: #6c757d;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* ======== RADIO STYLE ========== */
+input[type="radio"] {
+    display: none;
+}
+
+label {
+    padding: 1px 10px;
+    border: 2px solid transparent;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    width: 30px;
+    height: 20px;
+    text-align: center;
+    line-height: 20px;
+    margin-right: 10px;
+}
+
+input[type="radio"] + label {
+    border: 2px solid transparent;
+}
+
+/* Стили для выбранной кнопки YES */
+input[type="radio"][value="YES"]:checked + label {
+    color: white;
+    background-color: #00cc00;
+    border-color: #00cc00; /* Изменяем цвет границы при выборе */
+}
+
+/* Стили для выбранной кнопки NO */
+input[type="radio"][value="NO"]:checked + label {
+    color: white;
+    background-color: #ff0000;
+    border-color: #ff0000; /* Изменяем цвет границы при выборе */
+}
+
+/* Удаление фокуса при нажатии на кнопку */
+label:focus {
+    outline: none;
+}
+
+#timer {
+    display: inline-block;
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    color: gray;
+    text-align: left;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 100px;
+    border: 1px solid gray;
+    padding: 10px; /* Отступы внутри элемента */
+    border-radius: 10px; /* Радиус скругления углов */
 }

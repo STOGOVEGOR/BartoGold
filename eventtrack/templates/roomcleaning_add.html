@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House cleaning</title>
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body>
+
+<div id="timer"></div>
+
+<form method="POST" action="{% url 'roomcleaning_add' %}">
+    {% csrf_token %}
+    <div class="container">
+        {{ form.room }}
+        {{ form.maintenance }}
+    </div>
+    {% for group_name, fields in grouped_fields.items %}
+        <p class="my_heading">{{ group_name }}</p>
+        <div class="container">
+            {% for field in fields %}
+                <div class="item_label">{{ field.label_tag }}</div>
+                <div class="item_radio">
+                    {% for choice_value, choice_label in field.field.choices %}
+                        <input type="radio" id="{{ field.auto_id }}_{{ forloop.counter0 }}" name="{{ field.html_name }}" value="{{ choice_value }}" {% if field.value == choice_value %}checked{% endif %}>
+                        <label for="{{ field.auto_id }}_{{ forloop.counter0 }}">{{ choice_label }}</label>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
+<!--        <hr>-->
+    {% endfor %}
+    <p class="my_heading">Notes:</p>
+    {{ form.comment }}
+
+    <p class="my_heading">Photos:</p>
+    {{ form.files }}
+
+    <div class="button-in-row">
+        <button type="submit">Submit</button>
+        <a href="{% url 'roomcleaning' %}" class="button shadow">Cancel</a>
+    </div>
+</form>
+
+<script>
+window.onload = function() {
+    var startTime = new Date().getTime();
+
+    function updateTimer() {
+        var currentTime = new Date().getTime();
+        var elapsedTime = currentTime - startTime;
+
+        var hours = Math.floor(elapsedTime / (1000 * 60 * 60));
+        var minutes = Math.floor((elapsedTime % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((elapsedTime % (1000 * 60)) / 1000);
+
+        hours = (hours < 10) ? "0" + hours : hours;
+        minutes = (minutes < 10) ? "0" + minutes : minutes;
+        seconds = (seconds < 10) ? "0" + seconds : seconds;
+
+        document.getElementById("timer").innerHTML = hours + ":" + minutes + ":" + seconds;
+    }
+
+    setInterval(updateTimer, 1000); // Обновление каждую секунду
+};
+</script>
+</body>
+</html>

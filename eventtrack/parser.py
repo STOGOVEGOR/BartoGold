@@ -79,7 +79,10 @@ def get_workers_list(username):
     merged_df.loc[merged_df['Comment'] == 'OK', 'Status'] = 'ALLOWED'
 
     status_order = {'DENIED': 1, 'NOT FOUND': 2, 'ALLOWED': 3, 'NOT SET': 4}
-    merged_df = merged_df.sort_values(by=['Status', 'Name'], key=lambda x: x.map(status_order))
+    merged_df['Status'] = merged_df['Status'].map(status_order)
+    merged_df = merged_df.sort_values(by=['Status', 'WorkStatus', 'Name'])
+    merged_df['Status'] = merged_df['Status'].replace({v: k for k, v in status_order.items()})
+    # merged_df = merged_df.sort_values(by=['Status'], key=lambda x: x.map(status_order))
 
     return merged_df
 

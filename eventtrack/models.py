@@ -65,3 +65,30 @@ class CorrectiveAction(models.Model):
     act_by = models.CharField(max_length=50, null=True)
     act_date = models.DateTimeField(null=True)
     status = models.CharField(max_length=50, null=True)
+
+
+class RoomCleaning(models.Model):
+    # user = models.ForeignKey('User', on_delete=models.CASCADE)
+    created = models.DateTimeField(default=timezone.now)
+    updated = models.DateTimeField(auto_now=True)
+    # room = models.ForeignKey('Room', on_delete=models.SET_NULL, null=True)
+    room = models.CharField(max_length=20, null=False)
+    maintenance = models.ForeignKey("Maintenance", on_delete=models.PROTECT)
+    q1_1 = models.BooleanField(default=True)
+    q1_2 = models.BooleanField(default=True)
+    q2_1 = models.BooleanField(default=True)
+    q2_2 = models.BooleanField(default=True)
+    q2_3 = models.BooleanField(default=True)
+    comment = models.CharField(max_length=250, null=True)
+    time_start = models.DateTimeField(default=timezone.now)
+    time_end = models.DateTimeField(default=timezone.now)
+    time_spent = models.IntegerField(default=0)
+    file_links = models.TextField()
+
+class Maintenance(models.Model):
+    level = models.CharField(max_length=50, choices=[
+        ('0', 'No need'),
+        ('1', 'Preventive'),
+        ('2', 'Corrective'),
+        ('3', 'Major'),
+    ])

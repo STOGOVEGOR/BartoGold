@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+    <h1>{% block title %}House cleaning{% endblock %}</h1>
+
+    <form method="POST" action="{% url 'roomcleaning' %}">
+        <div class="container">
+            <div class="item_label">{{ form.question1_1.label_tag }}</div>
+            <div class="item_radio">{{ form.question1_1 }}</div>
+        </div>
+        <div class="container">
+            <div class="item_label">{{ form.question1_2.label_tag }}</div>
+            <div class="item_radio">{{ form.question1_2 }} </div>
+        </div>
+        <div class="button-in-row">
+            <button type="submit">Submit</button>
+        </div>
+
+    </form>
+
+{% endblock %}

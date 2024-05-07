@@ -21,12 +21,12 @@
             <p style="color: red;">{{ error }}</p>
         {% endfor %}
         <br>
-        <button type="submit">UPLOAD</button>
+        <div class="button-in-row">
+            <button type="submit">UPLOAD</button>
+            <a href="{% url 'staff_status' %}" class="button shadow">PROCEED EXISTING DATA</a>
+        </div>
     </form>
-    <p>OR</p>
-    <form action="{% url 'staff_status' %}">
-        <button type="submit">PROCEED EXISTING DATA</button>
-    </form>
+<!--    <p>OR</p>-->
     <br>
 
 {% endblock %}

@@ -2,6 +2,7 @@
 # 18
 
 # TODO
+
 chmod +x pull_and_restart.sh
 
 sudo apt install python3.10-venv

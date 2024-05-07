@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'eventtrack',
+    'housekeep',
 ]
 
 MIDDLEWARE = [
@@ -146,6 +147,8 @@ STATIC_ROOT = BASE_DIR / 'eventtrack/static'
 #STATICFILES_DIRS = [
 #    BASE_DIR, 'eventtrack/static',
 #]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

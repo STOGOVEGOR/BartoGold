@@ -62,3 +62,4 @@ docs/_build/
 *.sqlite3
 /.env
 /eventtrack/media/
+/test/

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>House cleaning</title>
+    {% load static %}
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+</head>
+<body style="margin-left: 20px">
+    <span style="font-size: 3em">Cleaning Inc.</span>
+    <br>
+    <br>
+    {% for message in messages %}
+        <p class="flash_msg" style="color: blue; font-size: 1.5em">{{ message | safe }}</p>
+    {% endfor %}
+    <div class="container">
+        <a href="{% url 'roomcleaning_add' %}" class="big-button">ROOM</a>
+        <a href="{% url 'roomcleaning_add' %}" class="big-button">HALLWAY</a>
+        <a href="{% url 'roomcleaning_add' %}" class="big-button">RECEPTION</a>
+        <a href="{% url 'roomcleaning_add' %}" class="big-button">MAIN HALL</a>
+    </div>
+
+</body>
+</html>

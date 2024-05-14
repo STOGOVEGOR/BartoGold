@@ -9,6 +9,7 @@ urlpatterns = [
     # path('logout/', views.user_logout, name='user_logout'),
     path('roomcleaning/', views.roomcleaning, name='roomcleaning'),
     path('roomcleaning_add/', views.roomcleaning_add, name='roomcleaning_add'),
+    path('survey_add/', views.survey_add, name='survey_add'),
     # Define other routes similarly
 ]
 

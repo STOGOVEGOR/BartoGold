@@ -39,3 +39,6 @@ def roomcleaning_add(request):
 
     return render(request, 'roomcleaning_add.html', {'form': form, 'grouped_fields': grouped_fields})
 
+
+def survey_add(request):
+    return render(request, 'survey_add.html')

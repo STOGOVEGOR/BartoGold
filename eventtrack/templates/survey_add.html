@@ -37,28 +37,28 @@
 
 <form method="POST" action="{% url 'survey_add' %}">
     {% csrf_token %}
-    <form action="submit_survey.php" method="post">
-        <div class="emojis">
-            <input type="radio" id="emoji5" name="rating" value="5">
-            <label for="emoji5"><img src="{% static 'img/5emo.png' %}" alt="Emoji 5"></label>
+    <div class="emojis">
+        <input type="radio" id="emoji5" name="rating" value="5">
+        <label for="emoji5"><img src="{% static 'img/5emo.png' %}" alt="Emoji 5"></label>
 
-            <input type="radio" id="emoji4" name="rating" value="4">
-            <label for="emoji4"><img src="{% static 'img/4emo.png' %}" alt="Emoji 4"></label>
+        <input type="radio" id="emoji4" name="rating" value="4">
+        <label for="emoji4"><img src="{% static 'img/4emo.png' %}" alt="Emoji 4"></label>
 
-            <input type="radio" id="emoji3" name="rating" value="3">
-            <label for="emoji3"><img src="{% static 'img/3emo.png' %}" alt="Emoji 3"></label>
+        <input type="radio" id="emoji3" name="rating" value="3">
+        <label for="emoji3"><img src="{% static 'img/3emo.png' %}" alt="Emoji 3"></label>
 
-            <input type="radio" id="emoji2" name="rating" value="2">
-            <label for="emoji2"><img src="{% static 'img/2emo.png' %}" alt="Emoji 2"></label>
+        <input type="radio" id="emoji2" name="rating" value="2">
+        <label for="emoji2"><img src="{% static 'img/2emo.png' %}" alt="Emoji 2"></label>
 
-            <input type="radio" id="emoji1" name="rating" value="1">
-            <label for="emoji1"><img src="{% static 'img/1emo.png' %}" alt="Emoji 1"></label>
-        </div>
-        <br>
+        <input type="radio" id="emoji1" name="rating" value="1">
+        <label for="emoji1"><img src="{% static 'img/1emo.png' %}" alt="Emoji 1"></label>
+    </div>
+    <br>
     <div class="button-in-row">
         <button type="submit">Submit</button>
         <a href="{% url 'survey_add' %}" class="button shadow">Cancel</a>
     </div>
 </form>
+
 </body>
 </html>

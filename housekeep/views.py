@@ -41,4 +41,20 @@ def roomcleaning_add(request):
 
 
 def survey_add(request):
+    if request.method == 'POST':
+        if request.POST.get('feedback'):
+            messages.success(request, 'Thanks for your feedback!')
+            return redirect('survey_add')
+        if not request.POST.get('rating'):
+            messages.success(request, 'Please select one of the emoticons!')
+            return redirect('survey_add')
+        rating = request.POST.get('rating')
+        if int(rating) == 5:
+            messages.success(request, 'Will be glad to see you again!')
+        elif 4 >= int(rating) >= 2:
+            messages.success(request, 'We will try to improve our service!')
+        else:
+            messages.success(request, 'We are really sorry, tell us more about your experience please:')
+            return render(request, 'survey_add.html', {'feedback': True})
+        return redirect('survey_add')
     return render(request, 'survey_add.html')

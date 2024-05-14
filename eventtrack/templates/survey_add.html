@@ -37,6 +37,7 @@
 
 <form method="POST" action="{% url 'survey_add' %}">
     {% csrf_token %}
+    <h2>Rate our food please:</h2>
     <div class="emojis">
         <input type="radio" id="emoji5" name="rating" value="5">
         <label for="emoji5"><img src="{% static 'img/5emo.png' %}" alt="Emoji 5"></label>
@@ -54,6 +55,12 @@
         <label for="emoji1"><img src="{% static 'img/1emo.png' %}" alt="Emoji 1"></label>
     </div>
     <br>
+    {% for message in messages %}
+        <p class="flash_msg" style="color: blue; font-size: 1.5em">{{ message | safe }}</p>
+    {% endfor %}
+    {% if feedback %}
+        <textarea id="feedback" name="feedback" rows="4" cols="50"></textarea><br>
+    {% endif %}
     <div class="button-in-row">
         <button type="submit">Submit</button>
         <a href="{% url 'survey_add' %}" class="button shadow">Cancel</a>

@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'eventtrack',
     'housekeep',
+    'prestart',
 ]
 
 MIDDLEWARE = [

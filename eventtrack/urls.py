@@ -16,7 +16,7 @@ urlpatterns = [
     path('aim/safe_acts/', views.safe_acts, name='safe_acts'),
     path('aim/upload_xls/', views.upload_xls, name='upload_xls'),
     path('aim/staff_status/', views.staff_status, name='staff_status'),
-    # path('dashboard/', views.dashboard, name='dashboard'),
+    path('dashboard/', views.dashboard, name='dashboard'),
     # path('get_tanks_data/', views.get_tanks_data, name='get_tanks_data')
     # Define other routes similarly
 ]

@@ -13,11 +13,11 @@ def normalize_name(full_name: str) -> str:
     """
     if not isinstance(full_name, str) or full_name.strip() == '' or full_name == 'Invalid Staff ID':
         return full_name
-    parts = full_name.strip().split()
+    parts = full_name.strip().split(", ")
     if len(parts) == 1:
         return parts[0]
-    surname = parts[-1]
-    given = ' '.join(parts[:-1])
+    surname = parts[0]
+    given = ' '.join(parts[1:])
     return f"{surname}, {given}"
 
 

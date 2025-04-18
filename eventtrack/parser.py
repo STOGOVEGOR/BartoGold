@@ -39,20 +39,21 @@ def get_workers_list(username):
     Загружает и обрабатывает списки эвакуации (evac.xlsx) и дыхания (breath.xlsx)
     для указанного пользователя, возвращает объединенный DataFrame со статусами сотрудников.
     """
+    # Пути к файлам
     user_media_dir = os.path.join(MEDIA_ROOT, username)
     evac_path = os.path.join(user_media_dir, 'evac.xlsx')
     breath_path = os.path.join(user_media_dir, 'breath.xlsx')
 
+    # Чтение данных
     df_evac = pd.read_excel(evac_path)
     df_breath = pd.read_excel(breath_path)
-
     if df_breath.empty:
         return pd.DataFrame()
 
-    # Инициализируем колонку для комментариев
+    # Инициализация
     df_breath['Comment'] = ''
 
-    # Очистка и нормализация ID
+    # Очистка ID
     df_evac['EmployeeID'] = df_evac['EmployeeID'].apply(clean_id)
     df_breath['Staff ID'] = df_breath['Staff ID'].apply(clean_id)
 
@@ -61,60 +62,65 @@ def get_workers_list(username):
     df_breath['Name'] = df_breath['Staff Name'].apply(normalize_name)
     df_breath['OriginalName'] = df_breath['Staff Name']
 
-    # Последние времена дыхания
+    # Последние замеры дыхания внутри файла
     df_breath['Time'] = pd.to_datetime(df_breath['Time'], format='%H:%M:%S', errors='coerce')
     max_times = df_breath.groupby(['Staff ID', 'Name'], as_index=False)['Time'].max()
     df_breath = df_breath.merge(max_times, on=['Staff ID', 'Name', 'Time'], how='inner')
-
-    # Переименования для объединения
     df_breath = df_breath.rename(columns={'Staff ID': 'StaffID'})
+
+    # Переименование поля статуса работы
     df_evac = df_evac.rename(columns={'Work Status': 'WorkStatus'})
 
-    # Отмечаем отсутствующих сотрудников
+    # Пометка отсутствующих и корректировка имён по ID
     missing_mask = ~df_breath['Name'].isin(df_evac['Name'])
     df_breath.loc[missing_mask, 'Comment'] = 'ERROR'
-
-    # Коррекция имён по совпадению ID
     for idx, row in df_breath[df_breath['Comment'] == 'ERROR'].iterrows():
         sid = row['StaffID']
-        matched = df_evac.loc[df_evac['EmployeeID'] == sid, 'Name']
-        if not matched.empty:
-            df_breath.at[idx, 'Name'] = matched.iloc[0]
+        match = df_evac.loc[df_evac['EmployeeID'] == sid, 'Name']
+        if not match.empty:
+            df_breath.at[idx, 'Name'] = match.iloc[0]
             df_breath.at[idx, 'Comment'] = 'OK'
-
-    # Обработка 'Invalid Staff ID'
     invalid_mask = df_breath['OriginalName'] == 'Invalid Staff ID'
     for idx in df_breath[invalid_mask].index:
         sid = df_breath.at[idx, 'StaffID']
-        matched = df_evac.loc[df_evac['EmployeeID'] == sid, 'Name']
-        if not matched.empty:
-            df_breath.at[idx, 'Name'] = matched.iloc[0]
+        match = df_evac.loc[df_evac['EmployeeID'] == sid, 'Name']
+        if not match.empty:
+            df_breath.at[idx, 'Name'] = match.iloc[0]
 
-    # Объединяем данные
+    # Объединение таблиц
     merged_df = pd.merge(
         df_evac[['Name', 'Organisation', 'Supervisor', 'Workgroup', 'WorkStatus', 'EmployeeID']],
         df_breath[['Name', 'Result', 'OriginalName', 'StaffID', 'Date', 'Comment']],
         how='outer', on='Name'
     )
 
-    # Приведение ID к строкам
+    # Приведение ID к строкам для первоначальной фазы
     for col in ['EmployeeID', 'StaffID']:
         merged_df[col] = merged_df[col].fillna('').astype(str)
 
-    # Дубли по EmployeeID заменяем StaffID
-    dup = merged_df.duplicated(subset=['EmployeeID'], keep=False) & merged_df['EmployeeID'].ne('')
-    merged_df.loc[dup, 'EmployeeID'] = merged_df.loc[dup, 'StaffID']
+    # Разбор и форматирование даты: оставить только день-месяц-год
+    merged_df['Date'] = pd.to_datetime(merged_df['Date'], dayfirst=True, errors='coerce')
+    merged_df['Date'] = merged_df['Date'].dt.strftime('%d-%m-%Y').fillna('')
 
-    # Вычисление статуса
+    # Отбор последних записей: отдельно для непустых StaffID, оставляем все пустые
+    nonempty = merged_df[merged_df['StaffID'] != '']
+    empty = merged_df[merged_df['StaffID'] == '']
+    nonempty = nonempty.sort_values(['StaffID', 'Date']).drop_duplicates(subset=['StaffID'], keep='last')
+    merged_df = pd.concat([nonempty, empty], ignore_index=True)
+
+    # Снова очищаем ID, чтобы избежать literal 'nan'
+    for col in ['EmployeeID', 'StaffID']:
+        merged_df[col] = merged_df[col].fillna('').astype(str).replace('nan', '')
+
+    # Вычисление статуса: сначала по Result, потом по ошибкам ID
     merged_df['Status'] = 'NOT SET'
     merged_df['Result'] = pd.to_numeric(merged_df['Result'].astype(str).str[:6], errors='coerce')
     merged_df.loc[merged_df['Result'] > 0, 'Status'] = 'DENIED'
     merged_df.loc[merged_df['Result'] == 0, 'Status'] = 'ALLOWED'
     merged_df.loc[merged_df['OriginalName'] == 'Invalid Staff ID', 'Status'] = 'NOT FOUND'
     merged_df.loc[merged_df['Comment'] == 'ERROR', 'Status'] = 'NOT FOUND'
-    merged_df.loc[merged_df['Comment'] == 'OK', 'Status'] = 'ALLOWED'
 
-    # Сортировка по статусам и полям
+    # Окончательная сортировка для отображения
     order = {'DENIED': 1, 'NOT FOUND': 2, 'ALLOWED': 3, 'NOT SET': 4}
     merged_df['StatusOrder'] = merged_df['Status'].map(order)
     merged_df = merged_df.sort_values(['StatusOrder', 'WorkStatus', 'Name'])

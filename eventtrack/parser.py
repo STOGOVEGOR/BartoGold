@@ -31,7 +31,7 @@ def clean_id(x) -> str:
     if re.fullmatch(r'\d+\.0+', s):
         s = s.split('.', 1)[0]
     # удаляем всё, кроме букв и цифр
-    return re.sub(r'[^A-Za-z0-9]', '', s)
+    return re.sub(r'[^A-Za-z0-9]', '', s).upper()
 
 
 def get_workers_list(username):

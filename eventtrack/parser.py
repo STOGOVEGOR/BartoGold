@@ -380,5 +380,21 @@ def counters(df):
     for key, value in row_dict.items():
         row_dict[key] = int(value)
 
-    return count_dict, row_dict
+    # --- НОВАЯ ЧАСТЬ: считаем уникальные значения WorkStatus ---
+    # Убедимся, что колонка существует; если нет — вернём пустой словарь
+    work_status_dict = {}
+
+    if 'WorkStatus' in df.columns:
+        # Заменяем NaN на пустую строку и приводим к str, затем считаем
+        work_status_series = df['WorkStatus'].fillna('').astype(str)
+        # Если хотите считать пустые как отдельную категорию, раскомментируйте следующую строку:
+        # work_status_series = work_status_series.replace('', 'UNKNOWN')
+        counts = work_status_series.value_counts(dropna=False).to_dict()
+        # Приведём все подсчёты к int и уберём ключ '' если не нужен
+        work_status_dict = {str(k): int(v) for k, v in counts.items()}
+        # Опционально: переименовать пустую строку в более читаемый label
+        if '' in work_status_dict:
+            work_status_dict['(empty)'] = work_status_dict.pop('')
+
+    return count_dict, row_dict, work_status_dict
 

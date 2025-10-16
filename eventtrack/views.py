@@ -22,8 +22,8 @@ from .parser import validate_xls, get_workers_list, check_data_for_errors, count
 from .settings import MEDIA_ROOT
 
 import logging
-logger = logging.getLogger(__name__)
 
+logger = logging.getLogger(__name__)
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 pull_and_restart_script = os.path.join(BASE_DIR, 'pull_and_restart.sh')
@@ -129,11 +129,18 @@ def staff_status(request):
         if errors:
             for error in errors:
                 messages.error(request, error)
-        count_dict, row_dict = counters(df)
+        count_dict, row_dict, work_status_dict = counters(df)
         row_dict = json.dumps(row_dict)
+        row_work_status_dict = json.dumps(work_status_dict)
         dataset = df.to_dict(orient='records')
         return render(request, 'staff_status.html',
-                      {'rows': dataset, 'count_dict': count_dict, 'row_dict': row_dict})
+                      {
+                          'rows': dataset,
+                          'count_dict': count_dict,
+                          'row_dict': row_dict,
+                          'work_status_dict': work_status_dict,
+                          'row_work_status_dict': row_work_status_dict
+                      })
     else:
         messages.error(request, data_format_error)
         return redirect('upload_xls')

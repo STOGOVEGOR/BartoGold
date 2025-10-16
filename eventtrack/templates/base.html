@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %} AIM Mining Corporation {% endblock %}</title>
+    <title>{% block title %} Alcholizer Automated System {% endblock %}</title>
     {% load static %}
     <link rel="icon" type="image/x-icon" href="{% static 'img/favicon.ico' %}">
     <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
@@ -12,7 +12,7 @@
 <body>
     <div class="menu">
             <div class="logo-container">
-                <a href="{% url 'index' %}"><img src="{% static 'img/logo.jpg' %}" width="30" height="30" alt="">AIM Mining Corporation</a>
+                <a href="{% url 'index' %}"><img src="{% static 'img/logo.jpg' %}" width="30" height="30" alt="">Alcholizer Automated System</a>
             </div>
             {% if user.is_authenticated %}
             <div class="auth-container">

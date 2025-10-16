@@ -5,13 +5,16 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 {% endblock %}
 {% block content %}
-    <h1>{% block title %}Staff status{% endblock %}</h1>
-    <div style="display: flex; justify-content: space-between; height: auto;">
-        <div style="flex: 0 0 45%;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+        <h1>{% block title %}Consolidated analyzed report data{% endblock %}</h1>
+        <button style="margin-right: 20px; height: 60px; width: 100px;" class="shadow" id="export-button" onclick="exportToExcel('staff_status', 'staff_status.xlsx')">Export to Excel</button>
+    </div>
+    <div style="display: flex; justify-content: flex-start; gap: 40px; height: auto;">
+        <div style="flex: 0 0 auto;">
             <table style="border-collapse: collapse;">
               <tr>
-                <th>Counters</th>
-                <th>Value</th>
+                <th>Status</th>
+                <th>Count</th>
               </tr>
               {% for key, value in count_dict.items %}
               <tr>
@@ -21,7 +24,7 @@
               {% endfor %}
             </table>
         </div>
-        <div style="text-align: center;">
+        <div style="flex: 0 0 auto; text-align: center; margin-right: 40px;">
             <canvas id="myChart" height="180"></canvas>
             <script>
             var row_dict = JSON.parse('{{ row_dict|escapejs }}');
@@ -78,7 +81,90 @@
             });
         </script>
         </div>
-        <button style="margin-right: 20px; height: 60px; width: 100px;" class="shadow" id="export-button" onclick="exportToExcel('staff_status', 'staff_status.xlsx')">Export to Excel</button>
+        <div style="flex: 0 0 auto; display: flex; justify-content: space-between; height: auto;">
+            <table>
+              <thead><tr><th>Work status</th><th>Count</th></tr></thead>
+              <tbody>
+                {% for status, cnt in work_status_dict.items %}
+                  <tr><td>{{ status }}</td><td>{{ cnt }}</td></tr>
+                {% empty %}
+                  <tr><td colspan="2">No work status data</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+        <!-- DIAGRAM FOR WORK STATUS -->
+        <div style="flex: 0 0 auto; text-align: center; margin-top: 10px;">
+            <canvas id="workStatusChart" height="auto"></canvas>
+            <script>
+            var work_status_dict = JSON.parse('{{ row_work_status_dict|escapejs }}');
+            var ws_labels = Object.keys(work_status_dict);
+            var ws_data = Object.values(work_status_dict);
+
+            // Цвета для столбцов — можно задать любые
+            var ws_colors = [
+                '#4CAF50', // green
+                '#2196F3', // blue
+                '#FFC107', // amber
+                '#FF5722', // deep orange
+                '#9C27B0', // purple
+                '#009688', // teal
+                '#E91E63', // pink
+                '#607D8B', // blue gray
+            ];
+
+            // Если категорий больше, чем цветов — повторяем палитру
+            while (ws_colors.length < ws_labels.length) {
+                ws_colors = ws_colors.concat(ws_colors);
+            }
+
+            var ctx2 = document.getElementById('workStatusChart').getContext('2d');
+            var workStatusChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ws_labels,
+                    datasets: [{
+                        label: 'Work Status Count',
+                        data: ws_data,
+                        backgroundColor: ws_colors.slice(0, ws_labels.length),
+                        borderColor: 'rgba(255, 255, 255, 0.8)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    indexAxis: 'y', // <-- делает диаграмму горизонтальной
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: false,
+                                text: 'Count'
+                            },
+                            ticks: {
+                                precision: 0 // чтобы не было 1.0, 2.0 и т.д.
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: false,
+                                text: 'Work Status'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Distribution by Work Status'
+                        }
+                    }
+                }
+            });
+            </script>
+        </div>
     </div>
 
     {% for message in messages %}

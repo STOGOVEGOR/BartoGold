@@ -1,0 +1,70 @@
+// bar chart
+
+            <script>
+            var work_status_dict = JSON.parse('{{ row_work_status_dict|escapejs }}');
+            var ws_labels = Object.keys(work_status_dict);
+            var ws_data = Object.values(work_status_dict);
+
+            // Цвета для столбцов — можно задать любые
+            var ws_colors = [
+                '#4CAF50', // green
+                '#2196F3', // blue
+                '#FFC107', // amber
+                '#FF5722', // deep orange
+                '#9C27B0', // purple
+                '#009688', // teal
+                '#E91E63', // pink
+                '#607D8B', // blue gray
+            ];
+
+            // Если категорий больше, чем цветов — повторяем палитру
+            while (ws_colors.length < ws_labels.length) {
+                ws_colors = ws_colors.concat(ws_colors);
+            }
+
+            var ctx2 = document.getElementById('workStatusChart').getContext('2d');
+            var workStatusChart = new Chart(ctx2, {
+                type: 'bar',
+                data: {
+                    labels: ws_labels,
+                    datasets: [{
+                        label: 'Work Status Count',
+                        data: ws_data,
+                        backgroundColor: ws_colors.slice(0, ws_labels.length),
+                        borderColor: 'rgba(255, 255, 255, 0.8)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: false,
+                    indexAxis: 'y', // <-- делает диаграмму горизонтальной
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            title: {
+                                display: false,
+                                text: 'Count'
+                            },
+                            ticks: {
+                                precision: 0 // чтобы не было 1.0, 2.0 и т.д.
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: false,
+                                text: 'Work Status'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: false,
+                            text: 'Distribution by Work Status'
+                        }
+                    }
+                }
+            });
+            </script>

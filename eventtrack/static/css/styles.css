@@ -422,3 +422,12 @@ label:focus {
     padding: 10px; /* Отступы внутри элемента */
     border-radius: 10px; /* Радиус скругления углов */
 }
+
+table {
+    border-collapse: collapse;
+    border: 1px solid #808080; /* Серый цвет в HEX */
+}
+td, th {
+    border: 0.5px solid gray; /* Серый цвет по имени */
+    padding: 8px;
+}

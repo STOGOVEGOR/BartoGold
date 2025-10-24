@@ -123,8 +123,10 @@ def upload_xls(request):
 def staff_status(request):
     username = request.user.username
     if validate_xls(username):
-        df = get_workers_list(username)
+        df, multiple_attempts = get_workers_list(username)
         errors = check_data_for_errors(df)
+        if multiple_attempts:
+            errors += multiple_attempts
         # errors = None
         if errors:
             for error in errors:

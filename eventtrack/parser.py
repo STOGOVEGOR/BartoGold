@@ -62,6 +62,16 @@ def get_workers_list(username):
     df_breath['Name'] = df_breath['Staff Name'].apply(normalize_name)
     df_breath['OriginalName'] = df_breath['Staff Name']
 
+    # исключаем строки с 'Invalid Staff ID' и считаем количество строк на каждое нормализованное имя
+    valid_mask = df_breath['Staff ID'] != 'Invalid Staff ID'
+    name_counts = df_breath.loc[valid_mask, 'Name'].value_counts()
+
+    # собираем количество попыток (только где count > 1)
+    multiple_attempts = []
+    for name, num in name_counts.items():
+        if num > 1:
+            multiple_attempts.append(f"{name} - {num} attempts made")
+
     # Последние замеры дыхания внутри файла
     df_breath['Time'] = pd.to_datetime(df_breath['Time'], format='%H:%M:%S', errors='coerce')
     max_times = df_breath.groupby(['Staff ID', 'Name'], as_index=False)['Time'].max()
@@ -136,7 +146,7 @@ def get_workers_list(username):
     merged_df = merged_df.sort_values(['StatusOrder', 'WorkStatus', 'Name'])
     merged_df = merged_df.drop(columns=['StatusOrder'])
 
-    return merged_df
+    return merged_df, multiple_attempts
 
 
 def validate_xls(username):

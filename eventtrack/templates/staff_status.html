@@ -24,6 +24,7 @@
               {% endfor %}
             </table>
         </div>
+        <!-- DIAGRAM FOR ALCHOLIZER STATUS -->
         <div style="flex: 0 0 auto; text-align: center; margin-right: 40px;">
             <canvas id="myChart" height="180"></canvas>
             <script>
@@ -95,7 +96,7 @@
         </div>
         <!-- DIAGRAM FOR WORK STATUS -->
         <div style="flex: 0 0 auto; text-align: center; margin-top: 10px;">
-            <canvas id="workStatusChart" height="auto"></canvas>
+            <canvas id="workStatusChart"></canvas>
             <script>
             var work_status_dict = JSON.parse('{{ row_work_status_dict|escapejs }}');
             var ws_labels = Object.keys(work_status_dict);
@@ -103,7 +104,7 @@
 
             // Цвета для столбцов — можно задать любые
             var ws_colors = [
-                '#4CAF50', // green
+                '#72EA9A', // green
                 '#2196F3', // blue
                 '#FFC107', // amber
                 '#FF5722', // deep orange
@@ -132,7 +133,8 @@
                     }]
                 },
                 options: {
-                    responsive: false,
+                    responsive: true,
+                    maintainAspectRatio: false,
                     plugins: {
                         legend: {
                             position: 'right',
@@ -199,6 +201,21 @@
     function exportToExcel(tableID, filename) {
         var table = document.getElementById(tableID);
         var wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+        var ws = wb.Sheets["Sheet1"];
+
+        // --- задание ширины столбцов (в "символах", не пикселях) ---
+        ws['!cols'] = [
+            { wch: 20 },  // date
+            { wch: 15 },  // status
+            { wch: 35 },  // workgroup
+            { wch: 30 },  // name
+            { wch: 10 },  // result
+            { wch: 25 },  // org
+            { wch: 20 },  // work status
+            { wch: 30 },  // supervisor
+            { wch: 10 },  // ID
+        ];
+
         var wbout = XLSX.write(wb, {bookType: 'xlsx', bookSST: true, type: 'binary'});
 
         function s2ab(s) {

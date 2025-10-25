@@ -6,11 +6,21 @@
 
 {% block content %}
     <h1>Welcome!</h1>
-
+    <p>Manually matching INX and Alcoholizer data is a massive time-sink. 😫</p>
+    <p>Reclaim your day with 3 simple steps:</p>
+    <ol>
+        <li>Upload your INX and Alcoholizer exports</li>
+        <li>Generate a comprehensive report instantly</li>
+        <li>Understand your compliance status with a clear summary</li>
+    </ol>
+    <p>Go from data to done in under 60 seconds.</p>
+    <p>👉 Get Your Instant Compliance Report!</p>
+    <br>
+    <br>
     {% if request.user.is_authenticated %}
         You are logged in as {{ request.user.username }}.
     {% else %}
-        Please login.
+        Please log in to continue. ↗️
     {% endif %}
     <br>
 {% endblock %}

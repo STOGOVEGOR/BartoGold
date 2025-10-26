@@ -9,8 +9,8 @@
 
 .content {
     flex: 1 0 auto;
-    margin-left: 270px; /* Ширина левой панели */
-    margin-top: 70px; /* Выравнивание с верхним пространством */
+    margin-left: 290px; /* Ширина левой панели */
+    margin-top: 50px; /* Выравнивание с верхним пространством */
     padding: 0;
 }
 
@@ -24,7 +24,7 @@
     color: var(--menu-text-color);
     padding-top: 0px;
     border-right: 1px solid #ced4da; /* Видимая граница контейнера справа */
-    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.3); /* Тень */
+    box-shadow: 10px 5px 20px rgba(0, 0, 0, 0.15); /* Тень */
     line-height: 1.4;
 }
 

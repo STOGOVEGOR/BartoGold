@@ -146,6 +146,9 @@ def get_workers_list(username):
     merged_df = merged_df.sort_values(['StatusOrder', 'WorkStatus', 'Name'])
     merged_df = merged_df.drop(columns=['StatusOrder'])
 
+    # проставляем прочерки вместо NaN (пустых значений)
+    merged_df = merged_df.fillna('—')
+
     return merged_df, multiple_attempts
 
 
@@ -233,8 +236,8 @@ def counters(df):
         # Приведём все подсчёты к int и уберём ключ '' если не нужен
         work_status_dict = {str(k): int(v) for k, v in counts.items()}
         # Опционально: переименовать пустую строку в более читаемый label
-        if '' in work_status_dict:
-            work_status_dict['(empty)'] = work_status_dict.pop('')
+        if '—' in work_status_dict:
+            work_status_dict['— (empty)'] = work_status_dict.pop('—')
 
     return count_dict, row_dict, work_status_dict
 
